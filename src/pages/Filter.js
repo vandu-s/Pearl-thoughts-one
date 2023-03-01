@@ -24,12 +24,10 @@ const Filter = () => {
   useEffect(() => {
     getUsers();
   }, []);
-
   const loadMore = () => {
-    if (data.length <= 20) {
-      setVisible(visible + 4);
-    }
+    setVisible(visible + 4);
   };
+  console.log(visible);
   const renderCard = (user, index) => {
     return <Card>{user.title}</Card>;
   };
