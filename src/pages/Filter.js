@@ -1,43 +1,58 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box } from "@mui/system";
-import Strip from "../components/Strip";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
+import Card from "../components/Card/Card";
+import axios from "axios";
+import Button from "@mui/material/Button";
 
 const Filter = () => {
+  const [data, setData] = useState([]);
+
+  const [visible, setVisible] = useState(4);
+
+  const getUsers = async () => {
+    await axios
+      .get("https://jsonplaceholder.typicode.com/posts")
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  const loadMore = () => {
+    if (data.length <= 20) {
+      setVisible(visible + 4);
+    }
+  };
+  const renderCard = (user, index) => {
+    return <Card>{user.title}</Card>;
+  };
   return (
     <Container fixed>
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <FormControl>
-          <RadioGroup
-            row
-            aria-labelledby="demo-row-radio-buttons-group-label"
-            name="row-radio-buttons-group"
+      <div className="center">
+        <h1>List of Data</h1>
+
+        <Grid container spacing={2} justifyContent="center" alignItems="center">
+          <Box
+            sx={{
+              backgroundColor: "#fff",
+              padding: "10px",
+              borderRadius: "10px",
+            }}
           >
-            <Strip>
-              <FormControlLabel
-                value="female"
-                control={<Radio />}
-                label="Female"
-              />
-            </Strip>
-            <Strip>
-              <FormControlLabel value="male" control={<Radio />} label="Male" />
-            </Strip>
-            <Strip>
-              <FormControlLabel
-                value="other"
-                control={<Radio />}
-                label="Other"
-              />
-            </Strip>
-          </RadioGroup>
-        </FormControl>
-      </Grid>
+            {data.slice(0, visible).map(renderCard)}
+            <Button variant="outlined" onClick={loadMore}>
+              Load More
+            </Button>
+          </Box>
+        </Grid>
+      </div>
     </Container>
   );
 };
