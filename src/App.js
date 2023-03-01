@@ -1,14 +1,12 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Filter from "./pages/Filter";
-import Selection from "./pages/Selection";
+import Home from "./pages/Home";
 function App() {
   return (
     <>
       <div className="App">
         <Routes>
-          <Route path="/" element={<Filter />} />
-          <Route path="/selection" element={<Selection />} />
+          <Route path="/" element={<Home />} />
         </Routes>
       </div>
     </>

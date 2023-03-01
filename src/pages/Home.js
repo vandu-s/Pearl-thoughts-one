@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 
 const Filter = () => {
   const [data, setData] = useState([]);
-
+  const [flag, setFlag] = useState(false);
   const [visible, setVisible] = useState(4);
 
   const getUsers = async () => {
@@ -26,10 +26,34 @@ const Filter = () => {
   }, []);
   const loadMore = () => {
     setVisible(visible + 4);
+
+    if (visible >= 16) {
+      setFlag(true);
+    } else {
+      setFlag(false);
+    }
   };
-  console.log(visible);
+  console.log(visible, flag);
   const renderCard = (user, index) => {
-    return <Card>{user.title}</Card>;
+    return (
+      <Box>
+        <Box
+          sx={{
+            backgroundColor: "#fff",
+            padding: "6px 12px",
+            borderRadius: "6px",
+            border: "1px solid #D3D3D3",
+            margin: "10px",
+            display: "flex",
+            justifyContent: "flex-start",
+          }}
+        >
+          <p>{index + 1}. &nbsp; </p>
+
+          <p>{user.title}</p>
+        </Box>
+      </Box>
+    );
   };
   return (
     <Container fixed>
@@ -45,9 +69,15 @@ const Filter = () => {
             }}
           >
             {data.slice(0, visible).map(renderCard)}
-            <Button variant="outlined" onClick={loadMore}>
-              Load More
-            </Button>
+            {flag === true ? (
+              <Button variant="outlined" disabled>
+                Load More
+              </Button>
+            ) : (
+              <Button variant="outlined" onClick={loadMore}>
+                Load More
+              </Button>
+            )}
           </Box>
         </Grid>
       </div>
